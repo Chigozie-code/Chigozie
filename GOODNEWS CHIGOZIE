@@ -1,0 +1,163 @@
+import React from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+
+// Animation variant for elements to fade in and slide up
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
+
+export default function Portfolio() {
+  // Section refs for smooth scrolling
+  const sections = {
+    about: React.useRef(null),
+    projects: React.useRef(null),
+    testimonials: React.useRef(null),
+    blog: React.useRef(null),
+    contact: React.useRef(null),
+  };
+
+  // Smooth scroll function
+  const scrollToSection = (key) => {
+    sections[key]?.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  return (
+    <motion.div
+      className="min-h-screen bg-white p-6"
+      initial="hidden"
+      animate="visible"
+      variants={{ visible: { transition: { staggerChildren: 0.2 } } }}
+    >
+      {/* Navigation bar */}
+      <nav className="flex justify-center gap-6 py-4 bg-white sticky top-0 shadow z-50">
+        {["about", "projects", "testimonials", "blog", "contact"].map((key) => (
+          <button
+            key={key}
+            className="text-gray-700 font-medium hover:text-blue-600 transition"
+            onClick={() => scrollToSection(key)}
+          >
+            {key.charAt(0).toUpperCase() + key.slice(1)}
+          </button>
+        ))}
+      </nav>
+
+      {/* Header section */}
+      <motion.header className="text-center mb-12" variants={fadeInUp}>
+        <h1 className="text-5xl font-bold text-gray-900 mb-3">Udorji Goodnews Chigozie</h1>
+        <p className="text-xl text-gray-600">
+          Sales & Business Development Specialist | MBA | Strategic Growth Enthusiast
+        </p>
+      </motion.header>
+
+      {/* About, Skills, and Contact Intro Section */}
+      <section ref={sections.about} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+        {["About Me", "Core Skills", "Contact"].map((section, index) => (
+          <motion.div key={index} variants={fadeInUp}>
+            <Card>
+              <CardContent className="p-6">
+                {/* About Me Card */}
+                {section === "About Me" && (
+                  <>
+                    <h2 className="text-2xl font-semibold mb-3 text-gray-800">{section}</h2>
+                    <p className="text-gray-600">
+                      I’m a dynamic sales professional with over 5 years of experience in B2B/B2C sales, business development,
+                      and strategic client engagement. Currently pursuing an MBA in Production at the University of Lagos,
+                      I bring a blend of sales execution and strategic insight to drive growth and impact.
+                    </p>
+                  </>
+                )}
+
+                {/* Skills Card */}
+                {section === "Core Skills" && (
+                  <>
+                    <h2 className="text-2xl font-semibold mb-3 text-gray-800">{section}</h2>
+                    <ul className="list-disc list-inside text-gray-600">
+                      <li>Strategic Sales Planning</li>
+                      <li>CRM Optimization</li>
+                      <li>Cold Calling & Lead Follow-Up</li>
+                      <li>Client Retention Strategies</li>
+                      <li>Sales Analytics & KPIs</li>
+                    </ul>
+                  </>
+                )}
+
+                {/* Contact Form */}
+                {section === "Contact" && (
+                  <>
+                    <h2 className="text-2xl font-semibold mb-3 text-gray-800">{section}</h2>
+                    <form
+                      action="https://formspree.io/f/yourformid" // Replace with your Formspree form ID
+                      method="POST"
+                      className="space-y-4"
+                    >
+                      <input type="text" name="name" required placeholder="Your Name" className="w-full border px-4 py-2 rounded" />
+                      <input type="email" name="email" required placeholder="Your Email" className="w-full border px-4 py-2 rounded" />
+                      <textarea name="message" required rows="4" placeholder="Your Message" className="w-full border px-4 py-2 rounded" />
+                      <Button type="submit" className="mt-2">Send Message</Button>
+                    </form>
+                  </>
+                )}
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+      </section>
+
+      {/* Projects, Testimonials, Blog Sections */}
+      {[
+        {
+          key: "projects",
+          title: "Highlighted Projects",
+          cards: [
+            { title: "Client Outreach Campaign", text: "Designed and implemented an outreach strategy, increasing client acquisition by 35%." },
+            { title: "CRM Revamp", text: "Led CRM integration to enhance pipeline visibility and reduce lead drop-off." },
+            { title: "Demo Framework", text: "Developed a structured demo system, improving conversion rates by 20%." },
+          ]
+        },
+        {
+          key: "testimonials",
+          title: "Testimonials",
+          cards: [
+            { text: "Goodnews is a powerhouse of energy and focus. His client-first mindset drives results.", source: "— Regional Sales Manager" },
+            { text: "He brings strategic clarity and tireless drive. His impact on our bottom line was significant.", source: "— Business Development Director" },
+          ]
+        },
+        {
+          key: "blog",
+          title: "Latest Blog Posts",
+          cards: [
+            { title: "5 Sales Techniques That Actually Work", text: "Discover proven methods to close deals and build trust." },
+            { title: "Power of Persistence in B2B", text: "How follow-ups can turn cold leads into loyal clients." },
+            { title: "Leadership Lessons from My MBA", text: "Insights gained from balancing education and execution." },
+          ]
+        }
+      ].map((section, index) => (
+        <motion.section ref={sections[section.key]} key={index} className="mb-16" variants={fadeInUp}>
+          <h2 className="text-3xl font-bold mb-6 text-center text-gray-900">{section.title}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {section.cards.map((card, i) => (
+              <motion.div key={i} variants={fadeInUp}>
+                <Card>
+                  <CardContent className="p-6">
+                    {card.title && <h3 className="text-xl font-semibold mb-2">{card.title}</h3>}
+                    <p className="text-gray-600 italic">{card.text}</p>
+                    {card.source && <p className="text-right mt-4 font-semibold text-gray-800">{card.source}</p>}
+                    {section.key === "blog" && <Button className="mt-4">Read More</Button>}
+                  </CardContent>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </motion.section>
+      ))}
+
+      {/* Footer */}
+      <motion.footer className="text-center text-gray-500 py-6 border-t mt-12" variants={fadeInUp}>
+        &copy; {new Date().getFullYear()} Udorji Goodnews Chigozie. All rights reserved.
+      </motion.footer>
+    </motion.div>
+  );
+}
